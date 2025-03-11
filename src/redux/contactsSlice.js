@@ -1,4 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, isAnyOf } from "@reduxjs/toolkit";
+import { fetchContacts, addContact, deleteContact } from './contactsOps';
+
 
 const initialState = {
     items: [],
@@ -9,15 +11,29 @@ const initialState = {
 const contactsSlice = createSlice({
     name: 'contacts',
     initialState,
-    reducers: {
-        addContact: (state, action) => {
-            state.items.push(action.payload);
-        },
-        deleteContact: (state, action) => {
-            state.items = state.items.filter(item => item.id !== action.payload)
-        },
-    },
+    extraReducers: builder => {
+        builder
+            .addCase(fetchContacts.fulfilled, (state, action) => {
+                state.items = action.payload;
+            })
+            .addCase(addContact.fulfilled, (state, action) => {
+                state.items.push(action.payload);
+            })
+            .addCase(deleteContact.fulfilled, (state, action) => {
+                state.items = state.items.filter(item => item.id !== action.payload);
+            })
+            .addMatcher(isAnyOf(fetchContacts.pending, addContact.pending, deleteContact.pending), (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addMatcher(isAnyOf(fetchContacts.fulfilled, addContact.fulfilled, deleteContact.fulfilled), (state) => {
+                state.loading = false;
+            })
+            .addMatcher(isAnyOf(fetchContacts.rejected, addContact.rejected, deleteContact.rejected), (state, action) => {
+                state.loading = false;
+                state.error = action.error?.message || "Щось пішло не так";
+            });
+    }
 });
 
-export const { addContact, deleteContact } = contactsSlice.actions;
 export default contactsSlice.reducer;
