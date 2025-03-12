@@ -1,9 +1,10 @@
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { nanoid } from 'nanoid'
 import s from "./ContactForm.module.css"
+import { nanoid } from 'nanoid'
 import { useDispatch } from 'react-redux';
 import { addContact} from '../../redux/contactsOps'
+import { useState } from 'react';
 
 const validationSchema = Yup.object({
         name: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Required'),
@@ -12,20 +13,31 @@ const validationSchema = Yup.object({
 
 
 const ContactForm = () => {
+    const [isClicked, setIsClicked] = useState(false);
+    const [isValidated, setIsValidated] = useState(false);
     const initialValues = {
         name: '',
         number: '',
+        id: nanoid()
     };
     
     const dispatch = useDispatch();
-    const handleSubmit = (values, {resetForm }) => {
-        dispatch(addContact({
-                id: nanoid(),
-                name: values.name,
-                number: values.number,
+
+    const handleSubmit = (values, { resetForm }) => {
+        setIsClicked(true);
+        dispatch(addContact(values))
+            .unwrap()
+            .then(() => {
+                setTimeout(() => {
+                    setIsClicked(false);
+                    setIsValidated(true);
+                    resetForm();
+                    setTimeout(() => {
+                        setIsValidated(false);
+                    }, 2000);
+                }, 2000);
             })
-        );
-        resetForm();
+        .catch(() => setIsClicked(false));
     }
 
 
@@ -48,7 +60,10 @@ const ContactForm = () => {
                 <ErrorMessage name="number" component="div" className={s.error} />
                 </div>
                 
-                <button type="submit" className={s.btn}>Add Contact</button>
+                <button type="submit" className={s.btn} disabled={isClicked}>
+                    {isClicked ? "Adding..." : "Add Contact"}
+                </button>
+                {/* <button type="submit" className={s.btn}>Add Contact</button> */}
             </Form>
         </Formik>
     )
