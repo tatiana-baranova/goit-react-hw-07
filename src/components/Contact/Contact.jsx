@@ -7,6 +7,9 @@ import { deleteContact } from "../../redux/contactsOps";
 const Contact = ({ name, number, id }) => {
     const dispatch = useDispatch();
 
+    const handleDelete = () => {
+    dispatch(deleteContact(id));
+    };
     return (
         <div className={s.contact}>
             <ul className={s.contactList}>
@@ -19,12 +22,11 @@ const Contact = ({ name, number, id }) => {
                     {number}
                 </li>
             </ul>
-            <button className={s.btn} onClick={() => dispatch(deleteContact(id))}>
+            <button className={s.btn} onClick={handleDelete}>
                 Delete
             </button>
         </div>
     )
-
 }
 
 export default Contact;

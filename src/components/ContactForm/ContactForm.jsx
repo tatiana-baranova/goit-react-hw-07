@@ -1,7 +1,7 @@
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import s from "./ContactForm.module.css"
-import { nanoid } from 'nanoid'
+// import { nanoid } from 'nanoid'
 import { useDispatch } from 'react-redux';
 import { addContact} from '../../redux/contactsOps'
 import { useState } from 'react';
@@ -19,7 +19,7 @@ const ContactForm = () => {
     const initialValues = {
         name: '',
         number: '',
-        id: nanoid()
+        // id: nanoid()
     };
     
     const dispatch = useDispatch();
@@ -64,7 +64,6 @@ const ContactForm = () => {
                 <button type="submit" className={s.btn} disabled={isClicked}>
                     {isClicked ? <Loader/> : "Add Contact"}
                 </button>
-                {/* <button type="submit" className={s.btn}>Add Contact</button> */}
             </Form>
         </Formik>
     )
