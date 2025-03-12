@@ -8,9 +8,20 @@ import { useState } from 'react';
 import Loader from '../Loader/Loader'
 
 const validationSchema = Yup.object({
-        name: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Required'),
-        number: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Required'),
-    });
+    name: Yup.string()
+    .min(3, 'Name is too short!')
+    .max(15, 'Name is too long!')
+    .required('Name is required'),
+
+    number: Yup.string()
+    .max(12, 'Number is too long!')
+    .required('Number is required'),
+});
+
+// const validationSchema = Yup.object({
+//         name: Yup.string().min(3, 'Too Short!').max(15, 'Too Long!').required('Required'),
+//         number: Yup.string().min(3, 'Too Short!').max(15, 'Too Long!').required('Required'),
+//     });
 
 
 const ContactForm = () => {
