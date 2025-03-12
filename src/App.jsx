@@ -6,7 +6,6 @@ import SearchBox from './components/SearchBox/SearchBox'
 import { useEffect } from 'react'
 import { fetchContacts } from './redux/contactsOps'
 import { selectLoading, selectError} from './redux/selectors'
-
 function App() {
 
   const dispatch = useDispatch();

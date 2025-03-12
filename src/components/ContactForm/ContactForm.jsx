@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid'
 import { useDispatch } from 'react-redux';
 import { addContact} from '../../redux/contactsOps'
 import { useState } from 'react';
+import Loader from '../Loader/Loader'
 
 const validationSchema = Yup.object({
         name: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Required'),
@@ -61,7 +62,7 @@ const ContactForm = () => {
                 </div>
                 
                 <button type="submit" className={s.btn} disabled={isClicked}>
-                    {isClicked ? "Adding..." : "Add Contact"}
+                    {isClicked ? <Loader/> : "Add Contact"}
                 </button>
                 {/* <button type="submit" className={s.btn}>Add Contact</button> */}
             </Form>
